@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*_api_key*
+netrc
+.azure/
+.openai*
+
+# Local run logs
+*.log
+benchmarks/results/*.log
+scratch/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

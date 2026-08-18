@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e ".[dev]" || pip install pytest pyyaml
+      - name: Unit tests (no LLM)
+        run: python -m pytest benchmarks/tests -q
+      - name: List frozen suites
+        run: |
+          python -m benchmarks.live.bpl_live --list --suite core
+          python -m benchmarks.live.bpl_live --list --suite hard
+      - name: Secret hygiene
+        run: |
+          set -e
+          extras=$(find . \( -name '.env' -o -name '.env.*' \) ! -name '.env.example' || true)
+          if [ -n "$extras" ]; then echo "found $extras"; exit 1; fi
+          if grep -RInE --exclude-dir=.git --exclude='.env.example' --exclude='*.md' \
+              --exclude='ci.yml' \
+              'sk-[A-Za-z0-9]{20,}|AZURE_OPENAI_(API_)?KEY=[^.\s]+|OPENAI_API_KEY=[^.\s]+' .; then
+            echo "possible credential material"; exit 1
+          fi
+          if grep -RInE --exclude-dir=.git --exclude-dir=.pytest_cache --exclude='ci.yml' \
+              'agentauth|SessionBroker|IntentEnvelope|SessionValueBudget|SessionCallBudget|make_broker|clayseal_expected|clayseal-aoai' .; then
+            echo "proprietary surface leaked into the public pack"; exit 1
+          fi

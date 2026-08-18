@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bpl-benchmark"
+version = "1.0.0"
+description = "BPL-v1.0: composite business-policy benchmark for LLM agents"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+live = ["openai>=1.40"]
+dev = ["pytest>=8.0", "bpl-benchmark[live]"]
+
+[project.urls]
+Homepage = "https://github.com/clayseal/bpl-benchmark"
+Repository = "https://github.com/clayseal/bpl-benchmark"
+
+[tool.hatch.build.targets.wheel]
+packages = ["benchmarks"]
+
+[tool.pytest.ini_options]
+testpaths = ["benchmarks/tests"]
+pythonpath = ["."]
+addopts = "-q"
