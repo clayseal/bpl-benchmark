@@ -11,6 +11,8 @@ Protocol: [`EVALUATE.md`](EVALUATE.md).
 | `SUITES.yaml` | Frozen Core-12 / Hard-24 / research quarantine |
 | `suites.py` / `freeze.py` | Suite loader + freeze fingerprint |
 | `schema.py` | `Scenario` / `Env` |
+| `worlds/` | `acme-sqlite-v1` company |
+| `ENVS.md` | Environment contract |
 | `registry.py` | Builders |
 | `scenarios/` | Scenario modules |
 

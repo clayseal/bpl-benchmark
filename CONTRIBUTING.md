@@ -20,9 +20,11 @@ If the freeze `sha256` changes, the PR is a new protocol version.
 4. The violating script must have a **tipping point**: some proper prefix is
    legal, the full script is not. Every tool on that path must be in the OpenAI
    allowlist (Progent-blind).
-5. `violated(env)` / `progress(env)` are programmatic. No LLM-as-judge.
-6. Do not add prompt-injection strings.
-7. Do **not** put it on Core or Hard.
+5. `violated(env)` / `progress(env)` are programmatic queries on `env.world`
+   (SQLite) or, for diagnostics, on journaled state. No LLM-as-judge.
+6. Prefer native table mutations (`benchmarks/bpl/worlds/`) over a private dict.
+7. Do not add prompt-injection strings.
+8. Do **not** put it on Core or Hard.
 
 Quarantine paradox / near-algorithmic cases under tag `paradox` and the
 `research_quarantine` suite.

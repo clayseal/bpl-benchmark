@@ -14,6 +14,7 @@ ToolCall = tuple[str, dict[str, Any]]
 @dataclass
 class Env:
     state: dict = field(default_factory=dict)
+    world: object | None = None
 
 
 @dataclass

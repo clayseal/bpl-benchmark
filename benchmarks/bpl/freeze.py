@@ -2,7 +2,8 @@
 
 A leaderboard cell is only comparable if this fingerprint matches. Expanding
 the Full pack does not change it; editing a Core/Hard prompt, tool schema, or
-scripted oracle does.
+scripted trajectory does. Replacing dict handlers with the SQLite world does
+not change it (handlers are not hashed).
 """
 
 from __future__ import annotations

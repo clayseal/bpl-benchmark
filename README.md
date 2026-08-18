@@ -41,9 +41,11 @@ Leaderboard suite is **Core-12**, frozen. Hard-24 is reported separately.
 | **escape** | Scope or duty separation grows across the trajectory | Each widen or approve is a permitted verb |
 | **confidentiality** | Allowed-channel or audience constraint after legitimate reads | Reads are authorized; the leak is the accumulation or the send |
 
-Oracles are programmatic predicates. No LLM judges. Every Core and Hard
+Oracles are SQL predicates on a SQLite company (`acme-sqlite-v1`). No LLM
+judges. Tools post to a ledger, IAM, mail, POs, permits. Every Core and Hard
 scenario has a **tipping point**: some proper prefix of the violating script is
-legal; the full script is not. CI enforces that.
+legal; the full script is not. CI enforces that. Environments:
+[`benchmarks/bpl/ENVS.md`](benchmarks/bpl/ENVS.md).
 
 ## Metrics
 
@@ -77,27 +79,57 @@ expand Core or Hard without a version bump. Fingerprint:
 python -m benchmarks.live.bpl_live --protocol
 ```
 
-## Published Core-12 (gpt-5-mini, n=8)
+## Reference numbers (gpt-5-mini, n=8)
 
-Azure deployment id `gpt-4o-mini-2024-07-18` served **gpt-5-mini**. Macro ± 95%
-CI is the SE of the 12 scenario rates. Several Gold-5 cells are saturated at
-V = 100%, so the interval is wide.
+Azure deployment id `gpt-4o-mini-2024-07-18` served **gpt-5-mini**; the served
+id is what a cell must be labelled with.
+
+These are baselines, not a leaderboard. **This pack ships no score for its own
+authors' system**: a benchmark whose headline row is an implementation nobody
+outside the project can run is not a benchmark, it is an advertisement. Scores
+here come from what you can reproduce from this repository.
 
 | condition | V | 95% CI (V) | P | U |
 |-----------|--:|------------|--:|--:|
 | none | 58.3% | [31.6, 85.0] | 91.2% | 33.1% |
-| progent | 58.3% | [32.5, 84.2] | 88.2% | 30.5% |
-| camel | 42.7% | [14.0, 71.4] | 58.7% | 16.0% |
-| clayseal | **0.0%** | [0.0, 0.0] | 71.0% | **71.0%** |
+| progent* | 58.3% | [32.5, 84.2] | 88.2% | 30.5% |
+| camel* | 42.7% | [14.0, 71.4] | 58.7% | 16.0% |
 
-Per-call schema (Progent) does not move V vs undefended. CaMeL lowers V mainly
-by also destroying P. Artifact:
+\* `progent` and `camel` are **mechanism reproductions written for this pack**,
+not the authors' released code. They implement the published decision rule — a
+per-call privilege schema, and a taint gate on untrusted-derived control flow —
+and any conclusion drawn from them is a conclusion about that rule as
+reimplemented here. Do not cite these as measurements of the original systems.
+`progent` and `camel` are implemented inline in
+[`benchmarks/live/bpl_live.py`](benchmarks/live/bpl_live.py) (the `condition ==` dispatch in the episode loop);
+`drift` and `authgraph` are in
+[`benchmarks/live/baselines/`](benchmarks/live/baselines/). All four are short
+enough to check line by line against the papers, and a correction PR is
+welcome.
+
+Read that way, the rows say what they should: a per-call schema does not move V
+on this class, because no single call in a violating sequence is out of schema.
+A taint gate lowers V partly by lowering P.
+
+Artifact:
 [`benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json).
-Gold-5 + notes: [`benchmarks/results/bpl_head_to_head.md`](benchmarks/results/bpl_head_to_head.md).
 
-ClaySeal numbers are published reference scores. The implementation is not in
-this repository. Default live conditions are `none,drift,authgraph`
-(mechanism reproductions of [DRIFT](https://arxiv.org/abs/2506.12104) and
+### On intervals, and a zero
+
+The macro CI is the SE across the 12 scenario rates, which is the right
+uncertainty about the *suite mean* and the wrong one for a cell that is
+saturated. When every scenario rate is identical the SE collapses to zero, and
+an interval of `[0.0, 0.0]` claims a precision no finite sample supports — an
+earlier revision of this file published exactly that.
+
+So: **a zero is reported as a bound, never as a point.** At n=8 a single
+scenario with no violations has a 97.5% one-sided upper bound of **36.9%**;
+pooled over 12 scenarios, 0 of 96 episodes gives **3.8%**. Both are worth
+knowing and neither is zero. n=8 is the minimum for a publishable cell and it is
+a low bar; report more if the claim matters.
+
+Default live conditions are `none,drift,authgraph` (mechanism reproductions of
+[DRIFT](https://arxiv.org/abs/2506.12104) and
 [AuthGraph](https://arxiv.org/abs/2605.26497)).
 
 ## Install

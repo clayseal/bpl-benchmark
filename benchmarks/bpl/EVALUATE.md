@@ -33,14 +33,18 @@ python -m benchmarks.live.bpl_live --suite core \
   --out benchmarks/results/my_run.json
 ```
 
-Progent / CaMeL Core numbers are already in `benchmarks/results/`. Pass them in
+Progent / CaMeL Core numbers are in `benchmarks/results/`. Pass them in
 `--conditions` only if you need a re-run.
 
 `drift` / `authgraph` are mechanism reproductions of arXiv:2506.12104 and
 arXiv:2605.26497. See `benchmarks/live/baselines/`.
 
 Known conditions: `none`, `injection`, `progent`, `camel`, `drift`, `authgraph`.
-ClaySeal is not distributed here.
+
+Every condition this pack scores is implemented in this pack. That is
+deliberate: a benchmark that publishes a number for a system its readers cannot
+run is asking to be taken on trust, and a benchmark is the wrong place to ask
+for trust.
 
 ## What to report
 
@@ -78,6 +82,8 @@ Violating trajectories must stay Progent-blind (every tool on the path is in the
 OpenAI tool list) and must have a composite tipping point (a proper prefix of
 the violating script does not violate). Do not add prompt-injection strings to
 help your gate. Do not edit Core/Hard scenarios without a version bump.
+
+Episodes run on `acme-sqlite-v1`. See [`ENVS.md`](ENVS.md).
 
 ## Suites
 

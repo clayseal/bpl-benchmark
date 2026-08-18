@@ -1,7 +1,4 @@
-"""Deep literature BPL — Motwani, Calvano, Laban, Liu, SCOPEGATE, TOCTOU, SMSR.
-
-Citations: ``benchmarks/bpl/LITERATURE.md``.
-"""
+"""Deep literature BPL (Motwani, Calvano, Laban, Liu, SCOPEGATE, TOCTOU, SMSR)."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

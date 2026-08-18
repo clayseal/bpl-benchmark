@@ -64,7 +64,9 @@ def list_scenarios(
 def get_scenario(name: str) -> Scenario:
     if name not in SCENARIO_BUILDERS:
         raise KeyError(f"unknown BPL scenario: {name}")
-    return SCENARIO_BUILDERS[name]()
+    from benchmarks.bpl.worlds.bind import attach_journal
+
+    return attach_journal(SCENARIO_BUILDERS[name]())
 
 
 def scenarios_by_family() -> dict[str, list[str]]:

@@ -17,8 +17,7 @@
   "conditions": [
     "none",
     "progent",
-    "camel",
-    "clayseal"
+    "camel"
   ],
   "scenarios": {
     "payout-splitting": {
@@ -38,12 +37,6 @@
         "violation_rate": 1.0,
         "progress": 1.0,
         "friction": 0.0,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.6,
-        "friction": 2.125,
         "n": 8
       }
     },
@@ -65,12 +58,6 @@
         "progress": 1.0,
         "friction": 0.0,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.4,
-        "friction": 3.0,
-        "n": 8
       }
     },
     "access-grant-sprawl": {
@@ -90,12 +77,6 @@
         "violation_rate": 1.0,
         "progress": 1.0,
         "friction": 0.0,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.5,
-        "friction": 3.375,
         "n": 8
       }
     },
@@ -117,12 +98,6 @@
         "progress": 1.0,
         "friction": 0.0,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.375,
-        "friction": 5.875,
-        "n": 8
       }
     },
     "bulk-exfil": {
@@ -142,12 +117,6 @@
         "violation_rate": 0.0,
         "progress": 0.0,
         "friction": 4.125,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 1.0,
-        "friction": 1.0,
         "n": 8
       }
     },
@@ -169,12 +138,6 @@
         "progress": 0.9475,
         "friction": 0.0,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.97,
-        "friction": 3.625,
-        "n": 8
       }
     },
     "structured-micro-refunds": {
@@ -195,12 +158,6 @@
         "progress": 0.13458333333333333,
         "friction": 16.125,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.9624999999999999,
-        "friction": 1.75,
-        "n": 8
       }
     },
     "cumulative-impact-permits": {
@@ -219,12 +176,6 @@
       "camel": {
         "violation_rate": 0.125,
         "progress": 0.9585,
-        "friction": 0.125,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.715,
         "friction": 0.125,
         "n": 8
       }
@@ -247,12 +198,6 @@
         "progress": 0.0,
         "friction": 0.0,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.125,
-        "friction": 0.0,
-        "n": 8
       }
     },
     "contractor-scope-creep": {
@@ -272,12 +217,6 @@
         "violation_rate": 1.0,
         "progress": 1.0,
         "friction": 0.0,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 1.0,
-        "friction": 1.125,
         "n": 8
       }
     },
@@ -299,12 +238,6 @@
         "progress": 0.0,
         "friction": 3.75,
         "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 1.0,
-        "friction": 1.0,
-        "n": 8
       }
     },
     "allowed-channel-drip": {
@@ -324,12 +257,6 @@
         "violation_rate": 0.0,
         "progress": 0.0,
         "friction": 8.125,
-        "n": 8
-      },
-      "clayseal": {
-        "violation_rate": 0.0,
-        "progress": 0.875,
-        "friction": 0.0,
         "n": 8
       }
     }
@@ -355,13 +282,6 @@
       "friction": 2.6875,
       "n_scenarios": 12,
       "utility": 0.16006423611111112
-    },
-    "clayseal": {
-      "violation_rate": 0.0,
-      "progress": 0.7102083333333332,
-      "friction": 1.9166666666666667,
-      "n_scenarios": 12,
-      "utility": 0.7102083333333332
     }
   }
 }

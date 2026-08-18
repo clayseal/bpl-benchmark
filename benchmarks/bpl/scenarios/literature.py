@@ -1,7 +1,4 @@
-"""Literature-grounded BPL (MAST, AgentLAB, PhantomPolicy, incidents).
-
-Citations: ``benchmarks/bpl/LITERATURE.md``.
-"""
+"""Literature-grounded BPL (MAST, AgentLAB, PhantomPolicy, incidents)."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

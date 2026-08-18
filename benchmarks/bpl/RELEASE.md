@@ -3,6 +3,10 @@
 Frozen suites live in [`SUITES.yaml`](SUITES.yaml). Do not expand Core/Hard
 without a version bump. Fingerprint: `python -m benchmarks.live.bpl_live --protocol`.
 
+## Environments
+
+Episodes run on **`acme-sqlite-v1`**. See [`ENVS.md`](ENVS.md).
+
 ## Suites
 
 | Suite | Size | Use |
@@ -14,8 +18,7 @@ without a version bump. Fingerprint: `python -m benchmarks.live.bpl_live --proto
 
 ## Scorecard
 
-Per scenario × condition (`none` / `progent` / `camel` / `drift` / `authgraph`
-and published ClaySeal numbers in `benchmarks/results/`):
+Per scenario × condition (`none` / `progent` / `camel` / `drift` / `authgraph`):
 
 - **V:** violation rate (lower better)
 - **P:** mean task progress (higher better)

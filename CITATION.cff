@@ -6,8 +6,8 @@ abstract: >-
   BPL-v1.0 is a ClaySeal pack for scoring agents that sit inside a company
   for a long session. The prompt is trusted. Every tool on the violating
   path is in-schema. The model can do the job it was asked to do and still
-  blow a rule that only exists across the whole shift. Oracles are
-  programmatic predicates, not LLM judges.
+  blow a rule that only exists across the whole shift. Oracles are SQL on a
+  SQLite company, not LLM judges.
 authors:
   - name: ClaySeal
     website: "https://github.com/clayseal"

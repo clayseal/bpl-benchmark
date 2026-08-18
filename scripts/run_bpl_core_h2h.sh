@@ -11,6 +11,9 @@ RUNS="${RUNS:-8}"
 SUITE="${SUITE:-core}"
 CONDITIONS="${CONDITIONS:-none,drift,authgraph}"
 OUT="${OUT:-benchmarks/results/bpl_${SUITE}_h2h_${MODEL//\//_}_r${RUNS}.json}"
+EXTRA=()
+if [[ -n "${START_AT:-}" ]]; then EXTRA+=(--start-at "$START_AT"); fi
+if [[ "${RESUME:-}" == "1" ]]; then EXTRA+=(--resume); fi
 
 echo "BPL ${SUITE} H2H model=$MODEL runs=$RUNS conditions=$CONDITIONS -> $OUT"
 python -m benchmarks.live.bpl_live \
@@ -18,4 +21,5 @@ python -m benchmarks.live.bpl_live \
   --model "$MODEL" \
   --runs "$RUNS" \
   --conditions "$CONDITIONS" \
-  --out "$OUT"
+  --out "$OUT" \
+  "${EXTRA[@]}"
