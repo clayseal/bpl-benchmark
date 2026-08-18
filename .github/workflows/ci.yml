@@ -22,6 +22,8 @@ jobs:
           pip install -e ".[dev]" || pip install pytest pyyaml
       - name: Unit tests (no LLM)
         run: python -m pytest benchmarks/tests -q
+      - name: Freeze fingerprint
+        run: python -m benchmarks.live.bpl_live --protocol
       - name: List frozen suites
         run: |
           python -m benchmarks.live.bpl_live --list --suite core
@@ -37,6 +39,6 @@ jobs:
             echo "possible credential material"; exit 1
           fi
           if grep -RInE --exclude-dir=.git --exclude-dir=.pytest_cache --exclude='ci.yml' \
-              'make_broker|clayseal-aoai' .; then
+              'make_broker|agentauth|clay-seal-capabilities|clayseal-capabilities' .; then
             echo "internal surface leaked into the public pack"; exit 1
           fi

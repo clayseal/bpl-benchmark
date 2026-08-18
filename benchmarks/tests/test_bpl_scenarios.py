@@ -507,6 +507,7 @@ def test_cli_list_import():
     assert bpl_live.main(["--list", "--suite", "core"]) == 0
     assert bpl_live.main(["--list", "--suite", "hard"]) == 0
     assert bpl_live.main(["--list", "--suite", "research_quarantine"]) == 0
+    assert bpl_live.main(["--protocol"]) == 0
 
 
 def test_frozen_suites_v1():

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "BPL-v1.0: Business Process Logic Benchmark for LLM Agents"
+message: If you use this benchmark, please cite it using these metadata.
+type: software
+authors:
+  - name: ClaySeal
+repository-code: "https://github.com/clayseal/bpl-benchmark"
+url: "https://github.com/clayseal/bpl-benchmark"
+license: MIT
+version: 1.0.0
+date-released: "2026-08-18"
+keywords:
+  - llm-agents
+  - benchmark
+  - ai-safety
+  - tool-use
+  - business-policy

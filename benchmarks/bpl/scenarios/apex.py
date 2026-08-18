@@ -1,8 +1,4 @@
-"""Apex BPL scenarios — difficulty 7–8 traps for frontier defenses.
-
-See ``benchmarks/bpl/APEX.md``. Composite traps beyond per-call allowlists (Progent)
-and prompt-taint gates (CaMeL).
-"""
+"""Apex BPL — amendment launder, mandate union, quorum aliases, gross/net."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

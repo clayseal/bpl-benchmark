@@ -63,12 +63,12 @@ external send.
 Deployment id `gpt-4o-mini-2024-07-18` served **gpt-5-mini** on that account.
 8 runs × 4 conditions × 12 scenarios.
 
-| condition | V (macro) | P (macro) | U = P(1−V) | n | model |
-|---|--:|--:|--:|---|---|
-| none | 58.3% | 91.2% | 33.1% | 12 | gpt-5-mini |
-| progent | 58.3% | 88.2% | 30.5% | 12 | gpt-5-mini |
-| camel | 42.7% | 58.7% | 16.0% | 12 | gpt-5-mini |
-| clayseal | **0.0%** | 71.0% | **71.0%** | 12 | gpt-5-mini |
+| condition | V (macro) | 95% CI (V) | P | U | n | model |
+|---|--:|---|--:|--:|---|---|
+| none | 58.3% | [31.6, 85.0] | 91.2% | 33.1% | 12 | gpt-5-mini |
+| progent | 58.3% | [32.5, 84.2] | 88.2% | 30.5% | 12 | gpt-5-mini |
+| camel | 42.7% | [14.0, 71.4] | 58.7% | 16.0% | 12 | gpt-5-mini |
+| clayseal | **0.0%** | [0.0, 0.0] | 71.0% | **71.0%** | 12 | gpt-5-mini |
 
 Per-scenario cells are in the JSON. Optional 2026 baseline smoke (DRIFT /
 AuthGraph on two scenarios): `bpl_sota_smoke_*.json`.
@@ -87,7 +87,7 @@ python -m benchmarks.live.bpl_live --list --suite hard
 
 ## 4. Full pack (appendix)
 
-~132 simulated scenarios. Not a frozen leaderboard. Paradox suite is
+132 simulated scenarios. Not a frozen leaderboard. Paradox suite is
 `research_quarantine` (monitor research; not a Core/Hard score).
 
 ```bash

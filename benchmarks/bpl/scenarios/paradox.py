@@ -1,8 +1,4 @@
-"""Paradox-tier BPL — near-algorithmically-hard edge cases.
-
-See ``benchmarks/bpl/PARADOX.md``. Difficulty 10; monitors need temporal logic,
-semantic closure, or adaptive-composition accounting.
-"""
+"""Paradox-tier BPL — research-quarantine predicates (difficulty 10)."""
 
 from __future__ import annotations
 import hashlib

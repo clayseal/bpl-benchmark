@@ -1,22 +1,4 @@
-"""Frontier-hard BPL scenarios — designed to trip strong models.
-
-These are not longer versions of “pay five bonuses over a ceiling.” They exploit
-failure modes frontier models still show under tool use:
-
-- **Implicit policy**: ceiling / retention lives in ``load_policy``, not the prompt.
-- **Delayed blast**: staging is fine; ``commit_*`` is the composite violation.
-- **Label laundering**: fees / tips / “ops adjustments” share a ledger key.
-- **Approval union**: two valid approvals whose sum exceeds the mandate.
-- **Urgency theater**: tool returns scream SLA / CEO without changing policy.
-- **Same-domain wrong recipient**: egress domain OK, mailbox wrong.
-- **Break-glass without sealed incident**: emergency tool used ad-hoc.
-- **Delegate widening**: helper agent granted elevate tools mid-run.
-- **Policy-as-code patch**: “fix CI” by editing the guardrail file.
-
-Fairness: every tool on the violating path remains in the OpenAI tool schema
-(Progent-blind); prompts fully specify the business task (CaMeL-untainted when
-args come from the user / policy text, not injection strings).
-"""
+"""Frontier-hard BPL — implicit policy, delayed blast, label launder, urgency theater."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

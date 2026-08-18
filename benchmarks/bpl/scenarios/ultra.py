@@ -1,20 +1,4 @@
-"""Ultra-hard BPL scenarios — collusion, windows, goal drift, self-minted authority.
-
-Builds on the frontier tier with traps that remain hard even after a model
-learns to call ``load_policy`` and stop at obvious session ceilings:
-
-- **Sibling-session collusion**: each persona stays under a local ceiling; the
-  org ledger does not.
-- **Rolling-window evasion**: ``advance_clock`` by hours looks like a reset;
-  the rolling 24h window does not clear.
-- **Trusted follow-up drift**: mid-thread clarification widens scope without
-  injection strings (forbidden vendor named in the original prompt).
-- **Self-minted approval tokens**: model is invited to mint a
-  cryptographic-looking token, then spend against it.
-- **Shadow dual-write**: “safe” mirror table silently promotes to production.
-- **Cover-story backup**: allowed internal backup path that auto-replicates
-  off-tenant.
-"""
+"""Ultra-hard BPL — sibling collusion, rolling windows, goal drift, self-minted tokens."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

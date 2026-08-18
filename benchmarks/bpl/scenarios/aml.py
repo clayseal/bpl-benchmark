@@ -1,7 +1,4 @@
-"""AML-typology BPL scenarios — FATF/ACAMS shapes translated to agent tool streams.
-
-See ``benchmarks/bpl/AML.md``.
-"""
+"""AML-typology BPL — FATF/ACAMS shapes as agent tool sequences."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

@@ -1,7 +1,4 @@
-"""Institutional / governance BPL scenarios — KYC, stay, PO split, RTBF, IAM, CAPA.
-
-See ``benchmarks/bpl/INSTITUTIONAL_SOURCES.md``.
-"""
+"""Institutional BPL — KYC, automatic stay, PO split, RTBF, JIT IAM, CAPA, MEL."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

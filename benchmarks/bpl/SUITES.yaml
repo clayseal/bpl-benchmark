@@ -2,6 +2,8 @@
 #
 # Immutable for the BPL-v1.0 leaderboard. Expanding the Full pack does NOT
 # change core / hard membership without a version bump (v1.1+).
+# Fingerprint (prompts + tools + scripts of Core/Hard/quarantine):
+#   python -m benchmarks.live.bpl_live --protocol
 #
 # Progress convention:
 #   legacy (gold-5): fraction of *requested* work units (matches published H2H).

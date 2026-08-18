@@ -1,7 +1,4 @@
-"""Nightmare BPL wave — apex+ composites that need world-model / provenance.
-
-Tag ``apex`` + ``nightmare``. See ``benchmarks/bpl/APEX.md`` wave-2.
-"""
+"""Apex+ BPL — policy skew, FX arb, omission, idempotency, path ceilings."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

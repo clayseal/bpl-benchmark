@@ -1,7 +1,4 @@
-"""Edge-case BPL — long / short / plain-sight / stacked attacks.
-
-See ``benchmarks/bpl/EDGECASES.md``.
-"""
+"""Edge-case BPL — long / short / plain-sight / stacked composites."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

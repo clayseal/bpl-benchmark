@@ -1,8 +1,6 @@
-"""Literature-grounded BPL scenarios (MAST, AgentLAB, PhantomPolicy, incidents).
+"""Literature-grounded BPL (MAST, AgentLAB, PhantomPolicy, incidents).
 
-See ``benchmarks/bpl/LITERATURE.md`` for citations and mapping. These encode
-structural multi-agent / long-horizon / policy-invisible failures as composite
-predicates — not prompt-injection strings.
+Citations: ``benchmarks/bpl/LITERATURE.md``.
 """
 
 from __future__ import annotations

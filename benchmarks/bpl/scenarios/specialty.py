@@ -1,8 +1,4 @@
-"""Cross-domain BPL wave-3 — specialty mines from UNORTHODOX_SOURCES.
-
-Clinical protocol, insurance SIU, COLREGs, export-control review, auction cartels,
-sports advantage/restart.
-"""
+"""Specialty-domain BPL — GCP protocol, SIU, COLREGs, export-control, auctions."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

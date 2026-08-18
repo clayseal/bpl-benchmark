@@ -1,7 +1,4 @@
-"""Unorthodox-domain BPL scenarios — tax, aviation, markets, healthcare, SOX, HRO.
-
-See ``benchmarks/bpl/UNORTHODOX_SOURCES.md``.
-"""
+"""Unorthodox-domain BPL scenarios — tax, aviation, markets, healthcare, SOX, HRO."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

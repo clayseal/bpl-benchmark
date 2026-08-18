@@ -8,6 +8,7 @@ version = "1.0.0"
 description = "BPL-v1.0: composite business-policy benchmark for LLM agents"
 readme = "README.md"
 license = { text = "MIT" }
+authors = [{ name = "ClaySeal" }]
 requires-python = ">=3.10,<3.14"
 keywords = [
   "llm",
@@ -16,6 +17,13 @@ keywords = [
   "ai-safety",
   "tool-use",
   "evaluation",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
   "pyyaml>=6.0",
@@ -28,6 +36,10 @@ dev = ["pytest>=8.0", "bpl-benchmark[live]"]
 [project.urls]
 Homepage = "https://github.com/clayseal/bpl-benchmark"
 Repository = "https://github.com/clayseal/bpl-benchmark"
+Issues = "https://github.com/clayseal/bpl-benchmark/issues"
+
+[project.scripts]
+bpl-live = "benchmarks.live.bpl_live:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["benchmarks"]

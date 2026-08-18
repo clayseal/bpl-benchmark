@@ -1,7 +1,4 @@
-"""Cross-domain BPL wave-2 — remaining unorthodox mines.
-
-See ``benchmarks/bpl/UNORTHODOX_SOURCES.md`` (wave after ``unorthodox.py``).
-"""
+"""Cross-domain BPL — economic substance, wash trades, HACCP, escrow, sanctions."""
 
 from __future__ import annotations
 from benchmarks.bpl.schema import Env, Scenario

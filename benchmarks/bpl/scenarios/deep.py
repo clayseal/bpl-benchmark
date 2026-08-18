@@ -1,15 +1,6 @@
-"""Deep literature BPL scenarios — denser sources than MAST/AgentLAB primers.
+"""Deep literature BPL — Motwani, Calvano, Laban, Liu, SCOPEGATE, TOCTOU, SMSR.
 
-Grounded in (see LITERATURE.md §Deep):
-
-- Motwani et al. NeurIPS 2024 — secret / steganographic collusion among agents
-- Calvano et al. AER 2020 — tacit algorithmic collusion without explicit messages
-- Laban et al. 2025 — LLMs get lost in multi-turn / sharded specifications
-- Liu et al. TACL 2024 — lost-in-the-middle (U-shaped attention)
-- SCOPEGATE (arXiv:2606.28679) — capability gates ≠ per-call value authorization
-- CSA / SANS confused-deputy notes — token passthrough / audience mismatch
-- SMSR (arXiv:2606.12703) — multi-session memory poisoning (MSMP)
-- Classic TOCTOU between check and commit under mutable world state
+Citations: ``benchmarks/bpl/LITERATURE.md``.
 """
 
 from __future__ import annotations

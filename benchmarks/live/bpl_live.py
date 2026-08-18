@@ -25,7 +25,7 @@ Scenarios live in the declarative pack ``benchmarks.bpl`` (BPL-v1).
 Metric triple per condition: violation rate (the composite policy was breached),
 task progress (legitimate work done), friction (calls the gate stopped).
 
-    AZURE_OPENAI_ENDPOINT=... AZURE_OPENAI_KEY=... \
+    AZURE_OPENAI_ENDPOINT=... AZURE_OPENAI_API_KEY=... \
         python -m benchmarks.live.bpl_live --runs 8 --model gpt-4o-mini-2024-07-18
 """
 
@@ -33,10 +33,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import statistics
+import subprocess
 import sys
 from typing import Any
 
+from benchmarks.bpl.freeze import freeze_fingerprint
 from benchmarks.bpl.registry import (
     SCENARIOS,
     get_scenario,
@@ -50,7 +53,17 @@ from benchmarks.bpl.suites import (
     suite_meta,
     suite_names,
 )
+from benchmarks.core.reporting import ModelIdentity, attach_macro_uncertainty
 from benchmarks.live.baselines import AuthGraphGate, DriftGate
+
+KNOWN_CONDITIONS = (
+    "none",
+    "injection",
+    "progent",
+    "camel",
+    "drift",
+    "authgraph",
+)
 
 _SYSTEM = (
     "You are a diligent operations assistant with access to tools. Use the "
@@ -160,10 +173,10 @@ def run_episode(
                 else:
                     blocks += 1
                     result = authgraph.deny_message(reason)
-            elif condition == "ivisor":
+            elif condition == "none":
                 result = scen.handler(env, name, args)
-            else:  # none
-                result = scen.handler(env, name, args)
+            else:
+                raise ValueError(f"unknown condition {condition!r}")
             returns.append(str(result))
             step += 1
             messages.append({"role": "tool", "tool_call_id": tc.id, "content": result})
@@ -187,8 +200,6 @@ def run(
 
     # Record the model that ANSWERED, not the one that was asked for.
     # Azure deployment names often differ from the served model id.
-    from benchmarks.core.reporting import ModelIdentity
-
     identity = ModelIdentity(requested=model, reported="")
     try:
         from openai import OpenAI as _OpenAI
@@ -234,24 +245,40 @@ def run(
     return out
 
 
-def _macro_average(per_scenario: dict[str, dict]) -> dict[str, dict]:
-    """Average V/P/friction across scenarios for each condition."""
-    conds: dict[str, list[dict]] = {}
-    for _name, by_cond in per_scenario.items():
-        for cond, metrics in by_cond.items():
-            conds.setdefault(cond, []).append(metrics)
-    out = {}
-    for cond, rows in conds.items():
-        out[cond] = {
-            "violation_rate": statistics.fmean(r["violation_rate"] for r in rows),
-            "progress": statistics.fmean(r["progress"] for r in rows),
-            "friction": statistics.fmean(r["friction"] for r in rows),
-            "n_scenarios": len(rows),
-            "utility": statistics.fmean(
-                r["progress"] * (1.0 - r["violation_rate"]) for r in rows
-            ),
-        }
-    return out
+def _git_sha() -> str | None:
+    try:
+        out = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            stderr=subprocess.DEVNULL,
+            cwd=os.path.dirname(__file__),
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return out.decode().strip() or None
+
+
+def _artifact_envelope(
+    *,
+    suite: str | None,
+    meta: dict[str, Any] | None,
+    model: str,
+    runs: int,
+    conditions: list[str],
+    seed: int | None,
+) -> dict[str, Any]:
+    freeze = freeze_fingerprint()
+    return {
+        "protocol": "BPL-v1.0",
+        "suite": suite,
+        "meta": meta,
+        "freeze": freeze,
+        "model": model,
+        "runs": runs,
+        "seed": seed,
+        "conditions": conditions,
+        "git_sha": _git_sha(),
+        "python": sys.version.split()[0],
+    }
 
 
 def main(argv=None):
@@ -295,9 +322,27 @@ def main(argv=None):
         "The API does not guarantee reproducibility; report the "
         "between-seed spread for published cells.",
     )
+    p.add_argument(
+        "--protocol",
+        action="store_true",
+        help="Print freeze fingerprint (version, sha256, suite sizes) and exit",
+    )
     args = p.parse_args(argv if argv is not None else sys.argv[1:])
 
     assert_suite_subset_of_registry(set(SCENARIOS))
+
+    if args.protocol:
+        freeze = freeze_fingerprint()
+        print(f"protocol={freeze['version']}")
+        print(f"sha256={freeze['sha256']}")
+        print(
+            f"n_core={freeze['n_core']} n_hard={freeze['n_hard']} "
+            f"n_research_quarantine={freeze['n_research_quarantine']}"
+        )
+        sha = _git_sha()
+        if sha:
+            print(f"git_sha={sha}")
+        return 0
 
     if args.list:
         if args.suite:
@@ -340,6 +385,14 @@ def main(argv=None):
             file=sys.stderr,
         )
         return 2
+    unknown = [c for c in conditions if c not in KNOWN_CONDITIONS]
+    if unknown:
+        print(
+            f"error: unknown condition(s) {unknown!r}. "
+            f"Known: {', '.join(KNOWN_CONDITIONS)}.",
+            file=sys.stderr,
+        )
+        return 2
 
     if args.suite:
         names = scenarios_in_suite(args.suite, registry_keys=sorted(SCENARIOS))
@@ -353,20 +406,27 @@ def main(argv=None):
         for name in names:
             print(f"\n--- {name} ---")
             per[name] = run(args.model, args.runs, name, conditions, seed=args.seed)
-        macro = _macro_average(per)
+        macro = attach_macro_uncertainty(per)
+        freeze = freeze_fingerprint()
         print("\n=== Suite macro-average ===")
+        print(f"freeze sha256={freeze['sha256'][:16]}…")
         for cond, m in macro.items():
+            vlo, vhi = m["violation_rate_ci95"]
             print(
-                f"  {cond:10} V={m['violation_rate'] * 100:5.1f}%  "
+                f"  {cond:10} V={m['violation_rate'] * 100:5.1f}% "
+                f"[{vlo * 100:5.1f}, {vhi * 100:5.1f}]  "
                 f"P={m['progress'] * 100:5.1f}%  U={m['utility'] * 100:5.1f}%  "
                 f"(n_scenarios={m['n_scenarios']})"
             )
         payload = {
-            "suite": args.suite,
-            "meta": meta,
-            "model": args.model,
-            "runs": args.runs,
-            "conditions": conditions,
+            **_artifact_envelope(
+                suite=args.suite,
+                meta=meta,
+                model=args.model,
+                runs=args.runs,
+                conditions=conditions,
+                seed=args.seed,
+            ),
             "scenarios": per,
             "macro": macro,
         }
