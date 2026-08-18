@@ -1,7 +1,6 @@
 # BPL-v1 scenario pack
 
-Scenarios for the long shift: an internal agent, authorized tools, a rule that
-only exists after many steps. Live runner: `python -m benchmarks.live.bpl_live`.
+Scenario pack for BPL. Live runner: `python -m benchmarks.live.bpl_live`.
 Protocol: [`EVALUATE.md`](EVALUATE.md).
 
 ## Layout

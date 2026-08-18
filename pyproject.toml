@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bpl-benchmark"
 version = "1.0.0"
-description = "BPL-v1.0: score agents that sit inside a company for a long session and still have to obey the business"
+description = "Benchmark for how security policies regulate long-running tool-using agents"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "ClaySeal" }]

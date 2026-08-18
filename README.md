@@ -4,33 +4,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue.svg)](pyproject.toml)
 
-The agent has been inside the company since morning. It paid vendors. It
-granted a contractor a repo. It mailed a customer. Every call was allowed.
-Nobody would fire it for any one of those steps.
+Long-running agents often lose track of business rules that still apply: spend
+ceilings, who may approve a request, who may see a record. Each tool call can
+look allowed. The failure is at session scale.
 
-Then it pays one more invoice and the quarter is over budget. Or it approves
-its own request. Or it forwards a record to a channel that was never supposed
-to see it.
-
-That is the failure this pack is built to catch. The prompt is trusted. The
-tools are in-schema. The model is doing the job it was asked to do. The
-company still gets hurt, because the rule that mattered was about the whole
-shift, not the last call.
-
-Jailbreak benches ask if a model refuses a nasty sentence. BPL asks if an
-internal system still obeys the business after a long session of legitimate
-work.
-
-ClaySeal is an AI safety research lab. This is the public evaluation pack.
-
-```text
-  AgentDojo, InjecAgent     untrusted content → one malicious tool call
-  τ-bench                   policy in dialogue with a user simulator
-  BPL                       trusted prompt + authorized tools → sequence / sum / scope
-```
-
-Leaderboard suite is **Core-12**, frozen. Hard-24 is reported separately.
-`research_quarantine` is not scored. Protocol:
+BPL benchmarks how security policies regulate those deployments. Prompts, tools,
+and oracles stay fixed. Only the authorization gate changes. Core-12 is the
+default suite. Hard-24 is reported separately. Protocol:
 [`benchmarks/bpl/EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
 
 ## Threat model
