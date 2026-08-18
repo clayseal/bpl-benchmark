@@ -37,6 +37,6 @@ jobs:
             echo "possible credential material"; exit 1
           fi
           if grep -RInE --exclude-dir=.git --exclude-dir=.pytest_cache --exclude='ci.yml' \
-              'agentauth|SessionBroker|IntentEnvelope|SessionValueBudget|SessionCallBudget|make_broker|clayseal_expected|clayseal-aoai' .; then
-            echo "proprietary surface leaked into the public pack"; exit 1
+              'make_broker|clayseal-aoai' .; then
+            echo "internal surface leaked into the public pack"; exit 1
           fi

@@ -1,11 +1,16 @@
 # BPL-v1.0
 
+[![CI](https://github.com/clayseal/bpl-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/clayseal/bpl-benchmark/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue.svg)](pyproject.toml)
+
 Business-process-logic benchmark for LLM agents: composite policies that no
 single in-schema tool call violates.
 
-This pack ships mechanism reproductions of DRIFT (arXiv:2506.12104) and
-AuthGraph (arXiv:2605.26497). Progent and CaMeL are optional conditions; their
-Core-12 numbers are in `benchmarks/results/` and are not re-run by default.
+This pack ships mechanism reproductions of [DRIFT](https://arxiv.org/abs/2506.12104)
+and [AuthGraph](https://arxiv.org/abs/2605.26497). Progent and CaMeL are optional
+conditions; their Core-12 numbers are in `benchmarks/results/` and are not re-run
+by default.
 
 ClaySeal scores in `benchmarks/results/` are published reference numbers. The
 ClaySeal implementation is not distributed here.
@@ -19,8 +24,9 @@ ClaySeal implementation is not distributed here.
 | **research_quarantine** | 12 | Paradox cases; not a default leaderboard score |
 | **full** | ~132 | Entire pack; appendix |
 
-Membership is `benchmarks/bpl/SUITES.yaml`. Do not expand Core or Hard without
-a version bump.
+Membership is [`benchmarks/bpl/SUITES.yaml`](benchmarks/bpl/SUITES.yaml). Do not
+expand Core or Hard without a version bump. Protocol:
+[`benchmarks/bpl/EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
 
 ## Install
 
@@ -41,7 +47,7 @@ python -m benchmarks.live.bpl_live --list --suite hard
 
 ## Live head-to-head
 
-Credentials from the environment only. See `.env.example`.
+Credentials from the environment only. See [`.env.example`](.env.example).
 
 ```bash
 export AZURE_OPENAI_ENDPOINT=...
@@ -64,11 +70,15 @@ Default conditions: `none,drift,authgraph`. Report **V**, **P**,
 | camel | 42.7% | 58.7% | 16.0% |
 | clayseal | **0.0%** | 71.0% | **71.0%** |
 
-Artifact: `benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`.
-Details: `benchmarks/results/bpl_head_to_head.md`.
+Artifact: [`benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json).
+Details: [`benchmarks/results/bpl_head_to_head.md`](benchmarks/results/bpl_head_to_head.md).
 
 ## Non-goals
 
 Not jailbreak ASR, CVE/malware, dual-use bio/chem/nuclear, or single
 out-of-schema denies. Do not treat `research_quarantine` as a default
 leaderboard score.
+
+## License
+
+MIT. See [`LICENSE`](LICENSE).
