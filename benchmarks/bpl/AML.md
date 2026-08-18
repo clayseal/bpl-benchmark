@@ -1,7 +1,6 @@
-# AML typology → BPL
+# AML typology to BPL
 
-Composite-policy encodings of FATF/ACAMS shapes. Violation is the sequence, not
-a single in-schema call.
+Violation is the sequence.
 
 | AML typology | BPL scenario(s) |
 |--------------|-----------------|

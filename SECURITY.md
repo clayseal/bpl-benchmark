@@ -7,5 +7,5 @@ This repository is an evaluation pack. It must not contain credentials.
 - Do not commit `.env`, key files, Azure CLI caches, or `netrc`.
 - `.env.example` lists variable names only.
 
-Report issues privately to the ClaySeal maintainers rather than opening a
+Report issues privately to the ClaySeal maintainers. Do not open a
 public issue that includes keys or customer data.

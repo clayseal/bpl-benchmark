@@ -12,7 +12,7 @@ venv/
 .mypy_cache/
 .ruff_cache/
 
-# Secrets — never commit
+# Secrets. Never commit
 .env
 .env.*
 !.env.example

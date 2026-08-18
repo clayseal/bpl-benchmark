@@ -10,8 +10,7 @@ python -m benchmarks.live.bpl_live --protocol
 pytest benchmarks/tests/test_bpl_protocol.py -q
 ```
 
-If the freeze `sha256` changes, the PR is a new protocol version, not a drive-by
-fix.
+If the freeze `sha256` changes, the PR is a new protocol version.
 
 ## Adding a diagnostic scenario (Full pack)
 

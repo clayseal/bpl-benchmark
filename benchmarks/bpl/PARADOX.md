@@ -1,7 +1,6 @@
 # Paradox suite (research quarantine)
 
-Difficulty 10. Not a Core/Hard score. Flat allowlists and single-key budgets are
-structurally insufficient for these predicates.
+Difficulty 10. Do not score as Core or Hard.
 
 | Failure mode | Scenario |
 |--------------|----------|

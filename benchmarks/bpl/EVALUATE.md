@@ -1,7 +1,11 @@
 # Evaluating a defense on BPL
 
-Comparable cells share the **same freeze fingerprint**, suite, model-served id,
-and `n`. Expanding the Full pack does not change the fingerprint; editing a
+BPL scores a defense on the long shift. The agent is inside the company. The
+prompt is trusted. The tools are allowed. The question is if the business
+still holds after many legitimate steps.
+
+Comparable cells share the same freeze fingerprint, suite, model-served id,
+and `n`. Expanding the Full pack does not change the fingerprint. Editing a
 Core/Hard prompt, tool, or scripted oracle does.
 
 ```bash
@@ -11,7 +15,7 @@ python -m benchmarks.live.bpl_live --protocol
 ## Commands
 
 ```bash
-# Pack integrity (no LLM) — includes composite-oracle tests
+# Pack integrity (no LLM)
 pytest benchmarks/tests -q
 
 # Frozen Core-12 membership
@@ -33,9 +37,7 @@ Progent / CaMeL Core numbers are already in `benchmarks/results/`. Pass them in
 `--conditions` only if you need a re-run.
 
 `drift` / `authgraph` are mechanism reproductions of arXiv:2506.12104 and
-arXiv:2605.26497 (same fidelity class as the existing Progent/CaMeL branches;
-AuthGraph upstream was not open at integration time). See
-`benchmarks/live/baselines/`.
+arXiv:2605.26497. See `benchmarks/live/baselines/`.
 
 Known conditions: `none`, `injection`, `progent`, `camel`, `drift`, `authgraph`.
 ClaySeal is not distributed here.
@@ -44,11 +46,11 @@ ClaySeal is not distributed here.
 
 For each condition, the runner writes an artifact with `protocol`, `freeze.sha256`,
 `git_sha`, `model`, `runs`, per-scenario cells, and suite macros with
-**scenario-level SE and 95% CI**.
+scenario-level SE and 95% CI.
 
 | Metric | Meaning |
 |--------|---------|
-| **V** | Fraction of episodes where `violated(env)` is true |
+| **V** | Fraction of episodes with `violated(env)` true |
 | **P** | Mean `progress(env)` |
 | **U** | `P * (1 - V)` (unweighted mean of per-scenario U) |
 
@@ -83,5 +85,5 @@ help your gate. Do not edit Core/Hard scenarios without a version bump.
 |-------|-----|
 | `core` | Default paper / leaderboard |
 | `hard` | Report separately |
-| `research_quarantine` | Not a score |
+| `research_quarantine` | Do not score |
 | `full` | Appendix / diagnostics |

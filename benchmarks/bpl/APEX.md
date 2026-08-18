@@ -1,8 +1,7 @@
 # Apex BPL scenarios
 
-Difficulty 7–8 composite traps on Hard (not Core). Every violating tool call
-stays schema-allowed. The breach is graphs, amendments, identity merges,
-gross-vs-net, recursive exceptions, or deferred obligations.
+Difficulty 7-8 traps on Hard. Every violating tool call stays schema-allowed.
+The breach is the graph, the amendment, the merge.
 
 | Scenario | Trap |
 |----------|------|

@@ -70,8 +70,7 @@ Deployment id `gpt-4o-mini-2024-07-18` served **gpt-5-mini** on that account.
 | camel | 42.7% | [14.0, 71.4] | 58.7% | 16.0% | 12 | gpt-5-mini |
 | clayseal | **0.0%** | [0.0, 0.0] | 71.0% | **71.0%** | 12 | gpt-5-mini |
 
-Per-scenario cells are in the JSON. Optional 2026 baseline smoke (DRIFT /
-AuthGraph on two scenarios): `bpl_sota_smoke_*.json`.
+Per-scenario cells are in the JSON.
 
 ---
 
@@ -88,7 +87,7 @@ python -m benchmarks.live.bpl_live --list --suite hard
 ## 4. Full pack (appendix)
 
 132 simulated scenarios. Not a frozen leaderboard. Paradox suite is
-`research_quarantine` (monitor research; not a Core/Hard score).
+`research_quarantine`. Do not score it as Core or Hard.
 
 ```bash
 python -m benchmarks.live.bpl_live --list

@@ -1,7 +1,6 @@
 # Edge-case gallery
 
-Diversity axes on tag `edge`. Long cases use `min_steps≥40`. Short cases are
-still multi-call composites (never a single out-of-schema deny).
+Tag `edge`. Long cases use `min_steps≥40`. Short cases are still multi-call.
 
 | Axis | Scenarios |
 |------|-----------|

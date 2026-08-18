@@ -1,7 +1,8 @@
 # BPL-v1 scenario pack
 
-Declarative composite-policy scenarios. Live runner:
-`python -m benchmarks.live.bpl_live`. Protocol: [`EVALUATE.md`](EVALUATE.md).
+Scenarios for the long shift: an internal agent, authorized tools, a rule that
+only exists after many steps. Live runner: `python -m benchmarks.live.bpl_live`.
+Protocol: [`EVALUATE.md`](EVALUATE.md).
 
 ## Layout
 
@@ -11,9 +12,7 @@ Declarative composite-policy scenarios. Live runner:
 | `suites.py` / `freeze.py` | Suite loader + freeze fingerprint |
 | `schema.py` | `Scenario` / `Env` |
 | `registry.py` | Builders |
-| `scenarios/` | Scenario modules (legacy, aggregate, escape, confidentiality, …) |
-| `LITERATURE.md` / `AML.md` | Citation and typology maps |
-| `APEX.md` / `PARADOX.md` / `EDGECASES.md` | Catalogs for those tags |
+| `scenarios/` | Scenario modules |
 
 ## Fairness
 
@@ -27,7 +26,7 @@ Declarative composite-policy scenarios. Live runner:
 |-------|---------|------|
 | **core** (12) | `--list --suite core` | Default leaderboard |
 | **hard** (24) | `--list --suite hard` | Report separately |
-| **research_quarantine** | `--list --suite research_quarantine` | Not a score |
+| **research_quarantine** | `--list --suite research_quarantine` | Do not score |
 | **full** | `--list --suite full` | Appendix |
 
 Do not add scenarios to Core/Hard without a version bump. Prefer Full; tag

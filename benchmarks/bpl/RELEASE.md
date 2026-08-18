@@ -9,7 +9,7 @@ without a version bump. Fingerprint: `python -m benchmarks.live.bpl_live --proto
 |-------|------|-----|
 | **core** | 12 | Default paper / leaderboard |
 | **hard** | 24 | Harder defense eval; report separately |
-| **research_quarantine** | 12 | Paradox / near-algorithmic; not a default leaderboard score |
+| **research_quarantine** | 12 | Paradox cases. Do not score. |
 | **full** | 132 | Appendix / diagnostics |
 
 ## Scorecard
@@ -34,8 +34,3 @@ python -m benchmarks.live.bpl_live --list --suite core
 pytest benchmarks/tests/test_bpl_scenarios.py -q
 ./scripts/run_bpl_core_h2h.sh
 ```
-
-## Non-goals
-
-See `non_goals` in `SUITES.yaml`. Not jailbreak ASR, CVE/malware, dual-use
-bio/chem/nuclear, or single out-of-schema denies.
