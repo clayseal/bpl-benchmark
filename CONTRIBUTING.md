@@ -2,8 +2,9 @@
 
 ## Leaderboard freeze
 
-Core-12 and Hard-24 are immutable for `BPL-v1.0`. Do not add, remove, reorder,
-or edit those scenarios without a version bump (`SUITES.yaml` + freeze tests).
+The **core** suite (12 scenarios) and **hard** suite (24 scenarios) are fixed
+for `BPL-v1.0`. Do not add, remove, reorder, or edit those scenarios without a
+version bump (`SUITES.yaml` + freeze tests).
 
 ```bash
 python -m benchmarks.live.bpl_live --protocol

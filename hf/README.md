@@ -6,9 +6,9 @@ task_categories:
 tags:
   - agents
   - benchmark
-  - ai-safety
   - tool-use
   - business-policy
+  - policy-compliance
 size_categories:
   - n<1K
 configs:
@@ -25,15 +25,26 @@ configs:
 
 # BPL-v1.0
 
-Long-running agents often lose track of business rules that still apply.
-BPL benchmarks how security policies regulate those deployments.
+**BPL** (Business Process Logic) benchmarks tool-using agents on **session-scale
+business rules** inside a simulated company: spend limits, approval rules,
+confidentiality. The user prompt is trusted; pass/fail is checked with SQL, not
+an LLM judge.
 
-The runnable pack is on GitHub:
-https://github.com/clayseal/bpl-benchmark
+Runnable code: https://github.com/clayseal/bpl-benchmark
 
-`scenarios` is the full public catalog (132). Core-12 and Hard-24 are the
-scored suites. `core_h2h` and `hard_h2h` are published live cells (n=8,
-gpt-5-mini served via Azure deployment `gpt-4o-mini-2024-07-18`). Load
-`scenarios` (default), `core_h2h`, `hard_h2h`, or `freeze`.
+## Files in this dataset
 
-Freeze `sha256`: `6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`
+| Config | Contents |
+|--------|----------|
+| **`scenarios`** | All 132 public scenarios (prompt, tools, family, difficulty). Only 12 + 24 are on the default leaderboard — see suite column (`core`, `hard`, or diagnostic). |
+| **`core_h2h`** | Published live scores for the **core** suite (12 scenarios × gates × metrics). 8 episodes per cell; model served as gpt-5-mini. |
+| **`hard_h2h`** | Same for the **hard** suite (24 scenarios). Report separately from core. |
+| **`freeze`** | Version fingerprint (SHA-256). Results are comparable only at the same hash. |
+
+## Metrics (column names in h2h files)
+
+- **`violation_rate`** — fraction of episodes where the business rule broke
+- **`progress`** — fraction of assigned work completed
+- **`condition`** — gate name (`none` = undefended; others are reimplemented baselines from the GitHub repo)
+
+Freeze hash: `6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`

@@ -1,37 +1,37 @@
-# BPL-v1 scenario pack
+# BPL scenario pack
 
-Scenario pack for BPL. Live runner: `python -m benchmarks.live.bpl_live`.
-Protocol: [`EVALUATE.md`](EVALUATE.md).
+Scenario definitions for BPL-v1.0. Live runner:
+`python -m benchmarks.live.bpl_live`. Protocol:
+[`EVALUATE.md`](EVALUATE.md).
 
 ## Layout
 
 | Path | Role |
 |------|------|
-| `SUITES.yaml` | Frozen Core-12 / Hard-24 / research quarantine |
-| `suites.py` / `freeze.py` | Suite loader + freeze fingerprint |
-| `schema.py` | `Scenario` / `Env` |
-| `worlds/` | `acme-sqlite-v1` company |
+| `SUITES.yaml` | Which scenarios belong to `core` (12), `hard` (24), research quarantine |
+| `suites.py` / `freeze.py` | Load suites; compute the freeze fingerprint hash |
+| `schema.py` | Scenario and environment types |
+| `worlds/` | SQLite company simulation (`acme-sqlite-v1`) |
 | `ENVS.md` | Environment contract |
-| `registry.py` | Builders |
-| `scenarios/` | Scenario modules |
+| `registry.py` | Scenario registry |
+| `scenarios/` | Scenario implementations |
 
-## Fairness
+## Fairness rules
 
-1. **Progent-blind.** Every tool on the violating path is in the OpenAI allowlist.
-2. **No injection strings.** The user prompt is the task.
-3. **Tipping point.** A proper prefix of the violating script is legal; the full script is not. CI enforces this on Core and Hard.
+1. Every tool on the violating path is in the model’s tool list (no “hidden” bad tools).
+2. No prompt-injection strings; the user message is the task.
+3. **Tipping point:** some prefix of the bad script is legal; the full script violates. CI checks this on `core` and `hard`.
 
-## Frozen suites
+## Suites
 
-| Suite | Command | Role |
-|-------|---------|------|
-| **core** (12) | `--list --suite core` | Default leaderboard |
-| **hard** (24) | `--list --suite hard` | Report separately |
-| **research_quarantine** | `--list --suite research_quarantine` | Do not score |
-| **full** | `--list --suite full` | Appendix |
+| Suite | Count | Use |
+|-------|------:|-----|
+| **`core`** | 12 | Default leaderboard |
+| **`hard`** | 24 | Harder set; report separately |
+| **`research_quarantine`** | 12 | Not for scoring |
+| **`full`** | 132 | Diagnostics only |
 
-Do not add scenarios to Core/Hard without a version bump. Prefer Full; tag
-paradox cases `paradox` / `research_quarantine`.
+Do not add names to `core` or `hard` without a version bump.
 
 ```bash
 python -m benchmarks.live.bpl_live --protocol

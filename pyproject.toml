@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bpl-benchmark"
 version = "1.0.0"
-description = "Benchmark for how security policies regulate long-running tool-using agents"
+description = "Live benchmark for session-scale business rules in tool-using agents (BPL-v1.0)"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "ClaySeal" }]
