@@ -13,6 +13,9 @@ and oracles stay fixed. Only the authorization gate changes. Core-12 is the
 default suite. Hard-24 is reported separately. Protocol:
 [`benchmarks/bpl/EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
 
+**GitHub:** [clayseal/bpl-benchmark](https://github.com/clayseal/bpl-benchmark) ·
+**Dataset:** [pberlizov/bpl-benchmark](https://huggingface.co/datasets/pberlizov/bpl-benchmark) on Hugging Face (scenario catalog + published cells).
+
 ## Threat model
 
 | Family | What `violated(env)` checks | Why per-call gates miss it |
@@ -69,30 +72,49 @@ authors' system**: a benchmark whose headline row is an implementation nobody
 outside the project can run is not a benchmark, it is an advertisement. Scores
 here come from what you can reproduce from this repository.
 
+### Core-12 (`none`, `progent`, `camel`)
+
 | condition | V | 95% CI (V) | P | U |
 |-----------|--:|------------|--:|--:|
 | none | 58.3% | [31.6, 85.0] | 91.2% | 33.1% |
 | progent* | 58.3% | [32.5, 84.2] | 88.2% | 30.5% |
 | camel* | 42.7% | [14.0, 71.4] | 58.7% | 16.0% |
 
+Artifact:
+[`benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json).
+
+### Hard-24 (`none`, `drift`, `authgraph`)
+
+| condition | V | 95% CI (V) | P | U |
+|-----------|--:|------------|--:|--:|
+| none | 19.3% | [6.4, 32.1] | 81.1% | 65.6% |
+| drift† | 10.4% | [1.0, 19.8] | 60.2% | 52.4% |
+| authgraph† | 14.1% | [0.8, 27.4] | 61.9% | 49.9% |
+
+Artifact:
+[`benchmarks/results/bpl_hard_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_hard_h2h_gpt-4o-mini-2024-07-18_r8.json).
+
+Hard is a mix: many scenarios are easy for this model; the suite mean is
+dominated by composites where session-scale rules still break (collusion,
+layering, staged batch commit, smurfing). Read V with P — several gate rows
+cut violation only by blocking work.
+
 \* `progent` and `camel` are **mechanism reproductions written for this pack**,
 not the authors' released code. They implement the published decision rule — a
 per-call privilege schema, and a taint gate on untrusted-derived control flow —
 and any conclusion drawn from them is a conclusion about that rule as
 reimplemented here. Do not cite these as measurements of the original systems.
-`progent` and `camel` are implemented inline in
-[`benchmarks/live/bpl_live.py`](benchmarks/live/bpl_live.py) (the `condition ==` dispatch in the episode loop);
-`drift` and `authgraph` are in
-[`benchmarks/live/baselines/`](benchmarks/live/baselines/). All four are short
-enough to check line by line against the papers, and a correction PR is
-welcome.
 
-Read that way, the rows say what they should: a per-call schema does not move V
-on this class, because no single call in a violating sequence is out of schema.
-A taint gate lowers V partly by lowering P.
+† `drift` and `authgraph` are mechanism reproductions of
+[DRIFT](https://arxiv.org/abs/2506.12104) and
+[AuthGraph](https://arxiv.org/abs/2605.26497), same caveat. Implemented in
+[`benchmarks/live/baselines/`](benchmarks/live/baselines/).
 
-Artifact:
-[`benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json).
+Read that way, the Core rows say what they should: a per-call schema does not
+move V on this class, because no single call in a violating sequence is out of
+schema. A taint gate lowers V partly by lowering P. On Hard, drift and authgraph
+move macro V modestly while U falls — the gates stall or block more than they
+secure session-scale rules.
 
 ### On intervals, and a zero
 
@@ -108,9 +130,8 @@ pooled over 12 scenarios, 0 of 96 episodes gives **3.8%**. Both are worth
 knowing and neither is zero. n=8 is the minimum for a publishable cell and it is
 a low bar; report more if the claim matters.
 
-Default live conditions are `none,drift,authgraph` (mechanism reproductions of
-[DRIFT](https://arxiv.org/abs/2506.12104) and
-[AuthGraph](https://arxiv.org/abs/2605.26497)).
+Default live conditions are `none,drift,authgraph`. Pass `progent,camel` in
+`--conditions` for Core mechanism comparisons.
 
 ## Install
 

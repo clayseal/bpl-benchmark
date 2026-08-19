@@ -373,6 +373,11 @@ def main(argv=None):
         help="Skip suite scenarios before this name (resume after a stall).",
     )
     p.add_argument(
+        "--scenarios",
+        default=None,
+        help="Comma-separated subset of --suite (for parallel shards).",
+    )
+    p.add_argument(
         "--resume",
         action="store_true",
         help="With --out, skip scenarios already complete in that JSON.",
@@ -455,6 +460,16 @@ def main(argv=None):
 
         names = scenarios_in_suite(args.suite, registry_keys=sorted(SCENARIOS))
         meta = suite_meta(args.suite)
+        if args.scenarios:
+            want = [s.strip() for s in args.scenarios.split(",") if s.strip()]
+            unknown = [s for s in want if s not in names]
+            if unknown:
+                print(
+                    f"error: not in suite {args.suite}: {', '.join(unknown)}",
+                    file=sys.stderr,
+                )
+                return 2
+            names = want
         if args.start_at:
             if args.start_at not in names:
                 print(f"error: --start-at {args.start_at!r} not in suite", file=sys.stderr)

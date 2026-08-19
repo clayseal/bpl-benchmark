@@ -26,7 +26,10 @@ netrc
 # Local run logs
 *.log
 benchmarks/results/*.log
+benchmarks/results/*.partial.json
+benchmarks/results/shard_*.json
 scratch/
+hf/data/
 
 # OS / editor
 .DS_Store

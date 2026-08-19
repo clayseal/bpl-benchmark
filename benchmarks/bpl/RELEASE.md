@@ -16,7 +16,28 @@ Episodes run on **`acme-sqlite-v1`**. See [`ENVS.md`](ENVS.md).
 | **research_quarantine** | 12 | Paradox cases. Do not score. |
 | **full** | 132 | Appendix / diagnostics |
 
-## Scorecard
+## Scorecard (published)
+
+**Core-12** (gpt-5-mini served, n=8):
+
+| condition | V | P | U |
+|-----------|--:|--:|--:|
+| none | 58.3% | 91.2% | 33.1% |
+| progent | 58.3% | 88.2% | 30.5% |
+| camel | 42.7% | 58.7% | 16.0% |
+
+**Hard-24** (same model, n=8):
+
+| condition | V | P | U |
+|-----------|--:|--:|--:|
+| none | 19.3% | 81.1% | 65.6% |
+| drift | 10.4% | 60.2% | 52.4% |
+| authgraph | 14.1% | 61.9% | 49.9% |
+
+Artifacts under `benchmarks/results/`. Hugging Face mirror:
+https://huggingface.co/datasets/pberlizov/bpl-benchmark
+
+## Scorecard (definitions)
 
 Per scenario × condition (`none` / `progent` / `camel` / `drift` / `authgraph`):
 

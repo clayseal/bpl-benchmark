@@ -43,7 +43,14 @@ def configure_provider(model: str) -> str:
     }
     has_openai = bool(os.environ.get("OPENAI_API_KEY"))
     use_azure = bool(az_ep and az_key) and (model in az_models or not has_openai)
-    timeout = _timeout()
+    # Connect must be bounded separately. A float timeout still left the hung
+    # Azure handshake sitting in poll() for hours.
+    try:
+        import httpx
+
+        timeout = httpx.Timeout(_timeout(), connect=20.0)
+    except ImportError:
+        timeout = _timeout()
     # We retry in llm_create; SDK retries stacked on a 60s cap caused both hangs
     # and connection flaps.
     max_retries = int(os.environ.get("BPL_LLM_SDK_RETRIES", "0"))
