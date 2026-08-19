@@ -18,9 +18,9 @@ Scenario definitions for BPL-v1.0. Live runner:
 
 ## Fairness rules
 
-1. Every tool on the violating path is in the model’s tool list (no “hidden” bad tools).
-2. No prompt-injection strings; the user message is the task.
-3. **Tipping point:** some prefix of the bad script is legal; the full script violates. CI checks this on `core` and `hard`.
+Tools on the violating path must be in the model’s allowlist. User messages are
+tasks, without injection payloads. The bad script must have a legal prefix; CI
+enforces that on `core` and `hard`.
 
 ## Suites
 

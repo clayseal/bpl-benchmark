@@ -3,11 +3,9 @@ title: "BPL-v1.0: Business Process Logic Benchmark for LLM Agents"
 message: If you use this benchmark, please cite it using these metadata.
 type: software
 abstract: >-
-  BPL-v1.0 is a ClaySeal pack for scoring agents that sit inside a company
-  for a long session. The prompt is trusted. Every tool on the violating
-  path is in-schema. The model can do the job it was asked to do and still
-  blow a rule that only exists across the whole shift. Oracles are SQL on a
-  SQLite company, not LLM judges.
+  BPL-v1.0 scores tool-using agents on business rules that apply across a long
+  session inside a simulated company. The user message is trusted. Tools on the
+  violating path are in-schema. Oracles are SQL queries on a SQLite company.
 authors:
   - name: ClaySeal
     website: "https://github.com/clayseal"

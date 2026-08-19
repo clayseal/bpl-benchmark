@@ -46,15 +46,15 @@ https://huggingface.co/datasets/pberlizov/bpl-benchmark
 
 ## Metric definitions
 
-- **Violation rate** — episodes where the business rule broke (lower better)
-- **Task progress** — work completed toward the assignment (higher better)
-- **Utility** — progress × (1 − violation rate); penalizes gates that only block
+**Violation rate** — episodes where the business rule broke (lower is better).  
+**Task progress** — work completed toward the assignment (higher is better).  
+**Utility** — progress × (1 − violation rate); down-weights gates that only block.
 
 Suite rows are unweighted means over 12 or 24 scenarios, with SE / 95% CI on
 those scenario rates.
 
-Progress: legacy gold scenarios measure fraction of *requested* work; other
-**core** scenarios measure fraction of *policy-allowed* work.
+Legacy gold scenarios measure fraction of requested work; other **core** scenarios
+use policy-allowed completion.
 
 ## Commands
 

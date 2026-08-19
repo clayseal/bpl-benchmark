@@ -25,26 +25,26 @@ configs:
 
 # BPL-v1.0
 
-**BPL** (Business Process Logic) benchmarks tool-using agents on **session-scale
-business rules** inside a simulated company: spend limits, approval rules,
-confidentiality. The user prompt is trusted; pass/fail is checked with SQL, not
-an LLM judge.
+**BPL** (Business Process Logic) scores tool-using agents on business rules that
+apply across a whole session inside a simulated company (spend caps, approvals,
+confidentiality). The user message is trusted. Outcomes are checked with SQL on
+a SQLite ledger.
 
-Runnable code: https://github.com/clayseal/bpl-benchmark
+Code: https://github.com/clayseal/bpl-benchmark
 
-## Files in this dataset
+## Files
 
 | Config | Contents |
 |--------|----------|
-| **`scenarios`** | All 132 public scenarios (prompt, tools, family, difficulty). Only 12 + 24 are on the default leaderboard — see suite column (`core`, `hard`, or diagnostic). |
-| **`core_h2h`** | Published live scores for the **core** suite (12 scenarios × gates × metrics). 8 episodes per cell; model served as gpt-5-mini. |
-| **`hard_h2h`** | Same for the **hard** suite (24 scenarios). Report separately from core. |
-| **`freeze`** | Version fingerprint (SHA-256). Results are comparable only at the same hash. |
+| **`scenarios`** | 132 public scenarios (prompt, tools, family). The `role` column marks the 12-scenario **core** leaderboard set, the 24-scenario **hard** set, or diagnostic cases. |
+| **`core_h2h`** | Live scores for **core** (8 episodes per cell; gpt-5-mini). |
+| **`hard_h2h`** | Live scores for **hard** (separate table from core). |
+| **`freeze`** | Protocol fingerprint (SHA-256). |
 
-## Metrics (column names in h2h files)
+## Columns in h2h files
 
-- **`violation_rate`** — fraction of episodes where the business rule broke
-- **`progress`** — fraction of assigned work completed
-- **`condition`** — gate name (`none` = undefended; others are reimplemented baselines from the GitHub repo)
+**`violation_rate`** — share of episodes where the oracle flagged a broken rule  
+**`progress`** — share of work completed  
+**`condition`** — gate name (`none` = undefended; others match the GitHub baselines)
 
-Freeze hash: `6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`
+`6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`

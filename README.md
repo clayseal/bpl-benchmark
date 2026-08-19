@@ -4,130 +4,122 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue.svg)](pyproject.toml)
 
-**BPL** (Business Process Logic) is a live benchmark for tool-using agents that
-work inside a company for a long session.
+**BPL** (Business Process Logic) runs live episodes with a tool-using agent inside
+a simulated company.
 
-The user’s request is trusted. The tools are real company APIs (pay, grant
-access, send mail, and so on). Each single call can look fine. The failure mode
-is session-scale: the agent finishes the job and a business rule is already
-broken — a spend ceiling, a two-person approval rule, a rule about who may see
-a record.
+The user message states the assignment. The agent gets a fixed tool
+list (pay, grant access, send mail, etc.). Individual calls can pass a per-call
+check and still add up to a violation: total spend over a ceiling, an approval
+chain that one person walked through, customer data in the wrong mailbox.
 
-This repo asks: **does a policy gate stop that, without stopping legitimate
-work?**
+We score whether an authorization **gate** blocks those outcomes while the agent
+still finishes real work.
 
-**GitHub:** [clayseal/bpl-benchmark](https://github.com/clayseal/bpl-benchmark) ·
-**Dataset (catalog + published scores):**
-[pberlizov/bpl-benchmark](https://huggingface.co/datasets/pberlizov/bpl-benchmark)
+GitHub: [clayseal/bpl-benchmark](https://github.com/clayseal/bpl-benchmark)  
+Dataset: [pberlizov/bpl-benchmark](https://huggingface.co/datasets/pberlizov/bpl-benchmark)
 
-Full evaluation protocol: [`benchmarks/bpl/EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
+Evaluation protocol: [`benchmarks/bpl/EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
 
-## What BPL is not
+## Scope
 
-BPL is **not** a jailbreak or prompt-injection benchmark. There is no attacker
-hidden in the prompt. It is **not** a harmful-content or malware benchmark.
-
-It is closer to **policy compliance for deployed agents**: rules that only make
-sense across many steps.
+BPL targets **policy compliance on long agent sessions**. It does not measure
+jailbreak rate, toxic generation, or malware reproduction. There is no hidden
+adversary in the prompt.
 
 ## How a run works
 
-1. The model gets a normal work request and a fixed tool list.
-2. It calls tools until it stops or hits a step limit.
-3. A **gate** may allow or block each call (see [conditions](#conditions-gates)
-   below). Everything else stays the same.
-4. A **SQLite** simulation of a company (`acme-sqlite-v1`) records what
-   happened. **Pass/fail is checked with SQL**, not with another LLM.
+The model receives a work request and may call tools until it stops or hits a
+step cap. An optional gate runs before each call; prompts and tools stay fixed
+either way.
 
-Each scored scenario is built so that **some prefix of the bad path is legal**;
-only the full sequence breaks the rule. That is enforced in CI.
+State lives in a SQLite company simulation (`acme-sqlite-v1`). Oracles are SQL
+queries on that database. We do not use a second LLM as judge.
 
-Environment details: [`benchmarks/bpl/ENVS.md`](benchmarks/bpl/ENVS.md).
+In each scored scenario, a short prefix of the “bad” tool sequence is legal. The
+full sequence crosses the line. CI checks that property.
+
+[`benchmarks/bpl/ENVS.md`](benchmarks/bpl/ENVS.md) describes the environment.
 
 ## Scenario families
 
-| Family | Plain-language rule | Why one call at a time looks OK |
-|--------|---------------------|----------------------------------|
-| **Aggregate** | Total spend, count, or time window exceeds a limit | Each payment or refund is under the per-call cap |
-| **Escape** | Scope creep or duty separation breaks over the session | Each widen or approve uses an allowed verb |
-| **Confidentiality** | Data goes to the wrong place after allowed reads | Each read is authorized; the leak is what gets sent |
+| Family | What breaks |
+|--------|-------------|
+| **Aggregate** | Session total, count, or time window over a limit |
+| **Escape** | Scope or duty separation erodes over many steps |
+| **Confidentiality** | Data sent or aggregated beyond what policy allows |
+
+Per-call checks often pass because each payment, widen, or read is small and
+in-schema.
 
 ## Metrics
 
-Each **episode** is one independent run of one scenario under one gate. Published
-cells use **8 episodes** per scenario per gate (`n=8`).
+An **episode** is one run of one scenario under one gate. Published cells use
+8 episodes (`n=8`).
 
 | Short | Name | Meaning |
 |-------|------|---------|
-| **V** | Violation rate | Share of episodes where the SQL oracle says the business rule broke. Lower is better. |
-| **P** | Task progress | Share of the assigned work completed (definition varies slightly by scenario; see protocol). Higher is better. |
-| **U** | Utility | `P × (1 − V)`. Rewards gates that both block violations **and** let work finish. A gate that blocks everything gets U = 0 even if V = 0. |
+| **V** | Violation rate | Fraction of episodes where the SQL oracle reports a broken rule. Lower is better. |
+| **P** | Task progress | Fraction of the assignment completed (see protocol for per-scenario definitions). Higher is better. |
+| **U** | Utility | `P × (1 − V)`. Drops when a gate blocks violations by blocking the job. |
 
-**Suite score:** unweighted average across scenarios in that suite (12 or 24),
-not one big pool of all episodes. The runner prints standard errors and 95%
-confidence intervals for the suite mean.
+The suite row is an unweighted mean over scenarios (12 or 24). The runner prints
+standard errors and 95% intervals for that mean.
 
-Do not rank gates on **V** alone. A gate that “wins” by refusing the task shows
-up as low **P** and low **U**.
+Low **V** alone is not enough. Check **P** and **U** before calling a gate an
+improvement.
 
 ## Suites
 
-Suites are fixed lists of scenario names in [`benchmarks/bpl/SUITES.yaml`](benchmarks/bpl/SUITES.yaml).
-Do not add scenarios to the scored suites without a version bump (e.g. v1.1).
+Lists are frozen in [`benchmarks/bpl/SUITES.yaml`](benchmarks/bpl/SUITES.yaml).
+Adding scenarios to a scored suite requires a version bump (e.g. v1.1).
 
 | Name in code | Size | Role |
 |--------------|------|------|
-| **`core`** | 12 scenarios | **Default** scored set; use this for comparisons |
-| **`hard`** | 24 scenarios | Harder composites; report separately from `core` |
-| **`research_quarantine`** | 12 | Research-only paradox cases; **do not** put on a leaderboard |
-| **`full`** | 132 | Full catalog for debugging; **do not** score as one leaderboard |
+| **`core`** | 12 | Default scored set |
+| **`hard`** | 24 | Harder composites; publish on its own table |
+| **`research_quarantine`** | 12 | Paradox cases for monitor research; no leaderboard |
+| **`full`** | 132 | Full catalog for debugging |
 
-When docs say **“Core-12”** or **“Hard-24”**, they mean the `core` suite (12
-scenarios) and the `hard` suite (24 scenarios).
-
-Check membership:
+“Core-12” and “Hard-24” in older notes mean the `core` and `hard` lists above.
 
 ```bash
 python -m benchmarks.live.bpl_live --list --suite core
 python -m benchmarks.live.bpl_live --list --suite hard
 ```
 
-**Freeze fingerprint** — a SHA-256 hash of all prompts, tools, and oracles in
-the scored suites. Comparable results must cite the same hash:
+**Freeze fingerprint:** SHA-256 over prompts, tools, and oracles in the scored
+suites. Compare runs only at the same hash.
 
 ```bash
 python -m benchmarks.live.bpl_live --protocol
 ```
 
-Current hash: `6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`
+`6a6560f26052b6b205c347c0ec2d0264a19c71a8a8ea69ce42e635b4fa6f422f`
 
-## Conditions (gates)
+## Gates (conditions)
 
-A **condition** is which authorization gate sits in front of the tools.
+| Name | Description |
+|------|-------------|
+| **`none`** | No gate; calls execute as requested |
+| **`progent`** | Per-call allowlist per [Progent](https://arxiv.org/abs/2504.11703); reimplemented in this repo |
+| **`camel`** | Dataflow taint gate per [CaMeL](https://arxiv.org/abs/2503.18813); reimplemented in this repo |
+| **`drift`** | [DRIFT](https://arxiv.org/abs/2506.12104)-style planner plus validator; reimplemented |
+| **`authgraph`** | [AuthGraph](https://arxiv.org/abs/2605.26497)-style graph plus arg sourcing; reimplemented |
 
-| Condition | What it is |
-|-----------|------------|
-| **`none`** | No extra gate; the model’s tool calls run as requested |
-| **`progent`** | Reimplementation of a **per-call tool allowlist** ([Progent paper](https://arxiv.org/abs/2504.11703)); not the authors’ shipped code |
-| **`camel`** | Reimplementation of a **dataflow taint** gate ([CaMeL paper](https://arxiv.org/abs/2503.18813)); same caveat |
-| **`drift`** | Reimplementation of **DRIFT** ([paper](https://arxiv.org/abs/2506.12104)): plan from the user prompt, block some off-plan or tool-derived args |
-| **`authgraph`** | Reimplementation of **AuthGraph** ([paper](https://arxiv.org/abs/2605.26497)): similar, with an authorization graph from prompt + catalog |
+Source: [`benchmarks/live/bpl_live.py`](benchmarks/live/bpl_live.py),
+[`benchmarks/live/baselines/`](benchmarks/live/baselines/).
 
-All gate code is in this repo ([`benchmarks/live/bpl_live.py`](benchmarks/live/bpl_live.py)
-and [`benchmarks/live/baselines/`](benchmarks/live/baselines/)) so you can
-audit it. Conclusions are about **these reimplementations**, not about unaudited
-vendor products.
-
-Default runs for new work: `none`, `drift`, `authgraph`. The **`core`** table
-below also includes `progent` and `camel` for mechanism comparison.
+New runs usually include `none`, `drift`, and `authgraph`. The **core** table
+below also includes `progent` and `camel` for comparison to published
+mechanisms.
 
 ## Published baselines (gpt-5-mini, 8 episodes per cell)
 
-Runs used Azure deployment name `gpt-4o-mini-2024-07-18`; the API reported the
-model as **gpt-5-mini**. Label results with the **served** model id.
+Azure deployment id `gpt-4o-mini-2024-07-18`; API returned **gpt-5-mini**. Report
+the served model id on every cell.
 
-These are **reproducible baselines**, not a vendor leaderboard. This pack does
-**not** publish a score for a proprietary system you cannot run from this repo.
+Numbers below are rerunnable from this repository. We do not ship scores for
+closed products.
 
 ### Core suite (12 scenarios)
 
@@ -137,12 +129,10 @@ These are **reproducible baselines**, not a vendor leaderboard. This pack does
 | progent | 58.3% | [32.5, 84.2] | 88.2% | 30.5% |
 | camel | 42.7% | [14.0, 71.4] | 58.7% | 16.0% |
 
-JSON:
 [`benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_core_h2h_gpt-4o-mini-2024-07-18_r8.json)
 
-On **core**, a per-call allowlist (`progent`) does not change the violation
-rate: every tool in the bad sequence is already in the schema. The taint gate
-(`camel`) lowers violations partly by doing less work (lower progress).
+On **core**, `progent` does not move violation rate: every tool in the bad path
+is already in the schema. `camel` cuts violations together with progress.
 
 ### Hard suite (24 scenarios)
 
@@ -152,20 +142,17 @@ rate: every tool in the bad sequence is already in the schema. The taint gate
 | drift | 10.4% | [1.0, 19.8] | 60.2% | 52.4% |
 | authgraph | 14.1% | [0.8, 27.4] | 61.9% | 49.9% |
 
-JSON:
 [`benchmarks/results/bpl_hard_h2h_gpt-4o-mini-2024-07-18_r8.json`](benchmarks/results/bpl_hard_h2h_gpt-4o-mini-2024-07-18_r8.json)
 
-Many **hard** scenarios are easy for this model (zero violations in 8
-episodes). The suite average is pulled up by composites such as collusion,
-layering, staged batch commits, and smurfing. Read violation rate together with
-task progress: some gates reduce violations only by blocking work.
+Most **hard** scenarios saw zero violations in eight episodes for this model. The
+suite average is driven by collusion, layering, staged batch commits, and
+smurfing. Pair violation rate with task progress when reading gate rows.
 
 ### Zeros and confidence intervals
 
-At `n=8`, a scenario with zero violations in every episode still has a
-non-trivial upper bound (roughly 37% for one scenario). A suite macro interval
-of `[0, 0]` is misleading when every scenario rate is identical. Treat “0%” as a
-small sample, not proof of perfection. Use more episodes if the claim matters.
+With `n=8`, zero violations in every episode still leaves a wide one-sided bound
+(about 37% for one scenario). Treat a printed 0% as a small sample. Run more
+episodes if you need a tight claim.
 
 ## Install
 
@@ -185,7 +172,7 @@ python -m benchmarks.live.bpl_live --protocol
 
 ## Live runs
 
-Credentials from the environment only. See [`.env.example`](.env.example).
+Credentials from the environment. [`.env.example`](.env.example).
 
 ```bash
 export AZURE_OPENAI_ENDPOINT=...
@@ -196,21 +183,20 @@ export AZURE_OPENAI_DEPLOYMENTS=gpt-4o-mini-2024-07-18
 SUITE=hard ./scripts/run_bpl_core_h2h.sh
 ```
 
-Minimum publishable result: **`core` suite**, **≥8 episodes**, freeze hash,
-served model id, git commit. Adding your own gate:
-[`EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
+Publishable cell: **`core` suite**, **≥8 episodes**, freeze hash, served model
+id, git commit. Custom gates: [`EVALUATE.md`](benchmarks/bpl/EVALUATE.md).
 
 ## Related work
 
-- [AgentDojo](https://github.com/ethz-spylab/agentdojo): prompt injection in tool-using agents
-- [τ-bench](https://github.com/sierra-research/tau-bench): policy-aware dialogue with a user simulator
-- [Progent](https://arxiv.org/abs/2504.11703): per-call privilege schemas
-- [CaMeL](https://arxiv.org/abs/2503.18813): capability-based dataflow taint
+[AgentDojo](https://github.com/ethz-spylab/agentdojo) (prompt injection),
+[τ-bench](https://github.com/sierra-research/tau-bench) (policy dialogue),
+[Progent](https://arxiv.org/abs/2504.11703) and [CaMeL](https://arxiv.org/abs/2503.18813)
+(per-call defenses we reimplement here).
 
 ## Cite
 
-See [`CITATION.cff`](CITATION.cff).
+[`CITATION.cff`](CITATION.cff).
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+MIT. [`LICENSE`](LICENSE).
